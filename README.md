@@ -1,6 +1,6 @@
 # fitness
 
-BotUrl: t.me/it_fitness_guru_bot
+## Bot url: t.me/it_fitness_guru_bot
 
 On dev:
 - docker-compose up -d
