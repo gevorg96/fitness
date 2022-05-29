@@ -1,5 +1,7 @@
 # fitness
 
+BotUrl: t.me/it_fitness_guru_bot
+
 On dev:
 - docker-compose up -d
 - npm run dev
