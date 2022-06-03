@@ -38,9 +38,7 @@ const startBot = () => {
 
     bot.action('not_bad', ctx => {
         ctx.replyWithHTML(notBad, Markup.inlineKeyboard([
-            [Markup.button.callback(
-`Ты такой не один, 
-это распространенные проблемы.`, 'problems') ]
+            [Markup.button.callback(`Ты такой не один, это распространенные проблемы.`, 'problems') ]
         ]))
     })
 
