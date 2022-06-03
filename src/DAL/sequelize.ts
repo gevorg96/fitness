@@ -12,10 +12,14 @@ import MuscleGroup from './Models/muscleGroup';
 import User from './Models/user';
 import UserGroup from './Models/userGroup';
 import UserStat from './Models/userStat';
+import dotenv from 'dotenv';
 
-export const sequelize = new Sequelize('postgres', 'postgres', 'password', {
+dotenv.config();
+
+export const sequelize = new Sequelize(process.env.PGDATABASE, process.env.PGUSER, process.env.PGPASSWORD, {
   dialect: 'postgres',
-  host: 'localhost',
+  host: process.env.PGHOST,
+  port: +process.env.PGPORT,
   models: [
     Achievement,
     Answer,

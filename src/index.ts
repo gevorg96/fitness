@@ -1,5 +1,5 @@
 import express, { Express, Request, Response } from 'express';
-import {startBot} from './telegramProcessor';
+import {startBot} from './Telegram/telegramProcessor';
 import dotenv from 'dotenv';
 import { sequelize } from './DAL/sequelize';
 import Question from './DAL/Models/question';
@@ -10,7 +10,7 @@ dotenv.config();
 const app: Express = express();
 app.use(json());
 
-(async () => await sequelize.sync({force: true}))();
+//(async () => await sequelize.sync({force: true}))();
 
 
 app.get('/questions', async (req: Request, res: Response) => {
