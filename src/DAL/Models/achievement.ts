@@ -13,7 +13,7 @@ export default class Achievement extends Model {
     id: number
 
     @Column(DataType.TEXT)
-    name: string
+    value: string
 
     @Column(DataType.DATE)
     condition: Date

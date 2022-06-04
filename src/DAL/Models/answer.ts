@@ -17,7 +17,7 @@ export default class Answer extends Model {
     id: number
   
     @Column(DataType.TEXT)
-    text: string
+    value: string
 
     @ForeignKey(() => Question)
     @Column(DataType.BIGINT)

@@ -14,21 +14,30 @@ export default class User extends Model {
     @Column(DataType.BIGINT)
     id!: number
 
-    @Column(DataType.TEXT)
-    name: string
-
-    @Column(DataType.TEXT)
-    login: string
-  
-    @Column(DataType.DATE)
-    paidTo: Date
-
     @ForeignKey(() => UserGroup)
     @Column(DataType.BIGINT)
     userGroupId: number
   
     @BelongsTo(() => UserGroup)
     userGroup: UserGroup
+
+    @Column(DataType.TEXT)
+    name: string
+
+    @Column(DataType.TEXT)
+    login: string
+
+    @Column(DataType.INTEGER)
+    gender: number
+  
+    @Column(DataType.TEXT)
+    email: string
+
+    @Column(DataType.TEXT)
+    city: string
+
+    @Column(DataType.DATE)
+    paidTo: Date
   
     @ForeignKey(() => Achievement)
     @Column(DataType.BIGINT)

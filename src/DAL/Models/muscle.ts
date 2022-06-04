@@ -6,7 +6,7 @@ import { Table,
 } from 'sequelize-typescript';
 
 @Table
-export default class Inventory extends Model {
+export default class Muscle extends Model {
     @PrimaryKey
     @Column(DataType.BIGINT)
     id: number

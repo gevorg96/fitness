@@ -1,4 +1,3 @@
-
 import {Sequelize} from 'sequelize-typescript';
 import Question from './Models/question';
 import Answer from './Models/answer';
@@ -13,6 +12,7 @@ import User from './Models/user';
 import UserGroup from './Models/userGroup';
 import UserStat from './Models/userStat';
 import dotenv from 'dotenv';
+import Muscle from './Models/muscle';
 
 dotenv.config();
 
@@ -28,6 +28,7 @@ export const sequelize = new Sequelize(process.env.PGDATABASE, process.env.PGUSE
     ExerciseGroup,
     Inventory,
     Menu,
+    Muscle,
     MuscleGroup,
     Question,
     User,

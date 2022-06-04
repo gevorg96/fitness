@@ -5,7 +5,10 @@ import {
     PrimaryKey, 
     DataType, 
     AutoIncrement,
+    ForeignKey,
+    BelongsTo,
  } from 'sequelize-typescript'
+import Inventory from './inventory'
 
 @Table
 export default class UserGroup extends Model {
@@ -15,26 +18,15 @@ export default class UserGroup extends Model {
   id: number
 
   @Column(DataType.TEXT)
-  gender: string
-
-  @Column(DataType.TEXT)
   aim: string
 
   @Column(DataType.INTEGER)
   age: number
 
-  @Column(DataType.TEXT)
-  bodyType: string
+  @ForeignKey(() => Inventory)
+  @Column(DataType.BIGINT)
+  inventoryId: number
 
-  @Column(DataType.TEXT)
-  activity: string
-
-  @Column(DataType.TEXT)
-  inventory: string
-
-  @Column(DataType.DATE)
-  timeArticle: Date
-
-  @Column(DataType.DATE)
-  timeExercise: Date
+  @BelongsTo(() => Inventory)
+  inventory: Inventory
 }

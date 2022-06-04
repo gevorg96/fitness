@@ -1,7 +1,7 @@
 import { Telegraf, Markup } from 'telegraf';
 import dotenv from 'dotenv';
 import { start, gender, email, emailRegex, emailStep, 
-    thx, threeYearsAgo, notBad, problems, cool } from './constants';
+    thx, threeYearsAgo, notBad, problems, cool, courseInfo, beginCourse, dislike, goOn, paymentSuccess } from './constants';
 import { SessionContext } from './sessionContext';
 const PostgresSession = require('telegraf-postgres-session');
 
@@ -49,16 +49,72 @@ const startBot = () => {
     })
 
     bot.action('cool', ctx => {
-        ctx.replyWithHTML(cool, Markup.inlineKeyboard([
-            [Markup.button.callback('Начать курс', 'begin_course')],
-            [Markup.button.callback('Расскажи о курсе', 'course_info'), Markup.button.callback('Покажи программу', 'plan_info')],
-            [Markup.button.callback('Пример упражнений', 'exercise_example'), Markup.button.callback('Пример статьи', 'article_example')]
+        ctx.replyWithHTML(cool, getMainKeyboard())
+    })
+
+    bot.action('course_info', ctx => {
+        ctx.replyWithHTML(courseInfo, getMainKeyboard())
+    });
+
+    bot.action('plan_info', ctx => {
+        ctx.replyWithHTML('*** Картинка с программой ***', getMainKeyboard())
+    })
+
+    bot.action('exercise_example', ctx => {
+        ctx.replyWithHTML('*** Упражнения ***', getMainKeyboard())
+    })
+
+    bot.action('article_example', ctx => {
+        ctx.replyWithHTML('*** Статья ***', getMainKeyboard())
+    })
+
+    bot.action('begin_course', ctx => {
+        ctx.replyWithHTML(beginCourse, getCourseKeyBoard())
+    })
+
+    bot.action('reviews', ctx => {
+        ctx.replyWithHTML("*** Картинки с отзывами ***", getCourseKeyBoard())
+    })
+
+    bot.action('dislike', ctx => {
+        ctx.replyWithHTML(dislike, getCourseKeyBoard())
+    })
+
+    bot.action('go_on', ctx => {
+        ctx.replyWithHTML(goOn, Markup.inlineKeyboard([
+            [Markup.button.callback('Оплатить', 'payment')],
         ]))
+    })
+
+    bot.action('payment', async ctx => {
+        await ctx.replyWithHTML("** Формирую платеж **")
+        await delay(1000);
+        await ctx.replyWithHTML("** Снимаю деньги **")
+        await delay(1000)
+        await ctx.replyWithHTML(paymentSuccess)
     })
 
     bot.launch();
     return bot;
 }
+
+const getMainKeyboard = () => {
+    return Markup.inlineKeyboard([
+        [Markup.button.callback('Начать курс', 'begin_course')],
+        [Markup.button.callback('Расскажи о курсе', 'course_info'), Markup.button.callback('Покажи программу', 'plan_info')],
+        [Markup.button.callback('Пример упражнений', 'exercise_example'), Markup.button.callback('Пример статьи', 'article_example')]
+    ]);
+}
+
+const getCourseKeyBoard = () => {
+    return Markup.inlineKeyboard([
+        [Markup.button.callback('Погнали!', 'go_on')],
+        [Markup.button.callback('А если не понравится?', 'dislike'), Markup.button.callback('Есть отзывы?', 'reviews')],
+    ]);
+}
+
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+
 
 const getBot = () => bot;
 
