@@ -1,4 +1,4 @@
-import {Sequelize} from 'sequelize-typescript';
+import { DataType, Sequelize} from 'sequelize-typescript';
 import Question from './Models/question';
 import Answer from './Models/answer';
 import Achievement from './Models/achievement';
@@ -16,7 +16,7 @@ import Muscle from './Models/muscle';
 
 dotenv.config();
 
-export const sequelize = new Sequelize(process.env.PGDATABASE, process.env.PGUSER, process.env.PGPASSWORD, {
+const sequelize = new Sequelize(process.env.PGDATABASE, process.env.PGUSER, process.env.PGPASSWORD, {
   dialect: 'postgres',
   host: process.env.PGHOST,
   port: +process.env.PGPORT,
@@ -37,3 +37,18 @@ export const sequelize = new Sequelize(process.env.PGDATABASE, process.env.PGUSE
   ],
   repositoryMode: true,
 });
+
+// this definition only for telegraf-postgres-session
+sequelize.define('postgress_sessions', {
+  id: {
+      type: DataType.STRING(5000),
+      primaryKey: true
+  },
+  session: {
+    type: DataType.STRING(5000)
+  }
+}, {
+  timestamps: false
+});
+
+export default sequelize;

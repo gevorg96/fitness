@@ -92,6 +92,69 @@ const startBot = () => {
         await ctx.replyWithHTML("** Снимаю деньги **")
         await delay(1000)
         await ctx.replyWithHTML(paymentSuccess)
+
+        ctx.session.step = 'objective'
+        await ctx.replyWithHTML("1.	Ваша цель:", getObjectiveMarkup())
+    })
+
+    bot.action('objective', ctx => {
+        ctx.replyWithHTML('1. Ваша цель:', getObjectiveMarkup())
+    })
+
+
+    bot.action('weight_up', ctx => {
+        ctx.session.step = 'weight_up'
+        ctx.replyWithHTML('2. Ваш возраст:', getAgeMarkup())
+    })
+    bot.action('weight_down', ctx => {
+        ctx.session.step = 'weight_down'
+        ctx.replyWithHTML('2. Ваш возраст:', getAgeMarkup())
+    })
+
+
+    bot.action('young', ctx => {
+        let prev = ctx.session.step;
+        ctx.session.step = 'young'
+        ctx.replyWithHTML('3. Тип фигуры', getFigureMarkup(prev))
+    })
+    bot.action('old', ctx => {
+        let prev = ctx.session.step;
+        ctx.session.step = 'old'
+        ctx.replyWithHTML('3. Тип фигуры', getFigureMarkup(prev))
+    })
+
+
+    bot.action('thin', ctx => {
+        let prev = ctx.session.step;
+        ctx.session.step = 'thin'
+        ctx.replyWithHTML('4. Ваша дневная активность:', getActivityMarkup(prev))
+    })
+    bot.action('muscular', ctx => {
+        let prev = ctx.session.step;
+        ctx.session.step = 'muscular'
+        ctx.replyWithHTML('4. Ваша дневная активность:', getActivityMarkup(prev))
+    })
+    bot.action('fat', ctx => {
+        let prev = ctx.session.step;
+        ctx.session.step = 'fat'
+        ctx.replyWithHTML('4. Ваша дневная активность:', getActivityMarkup(prev))
+    })
+
+
+    bot.action('activity_low', ctx => {
+        let prev = ctx.session.step;
+        ctx.session.step = 'activity_low'
+        ctx.replyWithHTML('5. Наличие или отсутствие спортивного инвентаря (множественный выбор ответов):', getInventoryMarkup(prev))
+    })
+    bot.action('activity_medium', ctx => {
+        let prev = ctx.session.step;
+        ctx.session.step = 'activity_medium'
+        ctx.replyWithHTML('5. Наличие или отсутствие спортивного инвентаря (множественный выбор ответов):', getInventoryMarkup(prev))
+    })
+    bot.action('activity_high', ctx => {
+        let prev = ctx.session.step;
+        ctx.session.step = 'activity_high'
+        ctx.replyWithHTML('5. Наличие или отсутствие спортивного инвентаря (множественный выбор ответов):', getInventoryMarkup(prev))
     })
 
     bot.launch();
@@ -113,8 +176,50 @@ const getCourseKeyBoard = () => {
     ]);
 }
 
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+const getObjectiveMarkup = () => {
+    return Markup.inlineKeyboard([
+        [Markup.button.callback('Набор мышечной массы', 'weight_up')],
+        [Markup.button.callback('Сушка', 'weight_down')]
+    ]);
+}
 
+const getAgeMarkup = () => {
+    return Markup.inlineKeyboard([
+        [Markup.button.callback('18-35', 'young'), Markup.button.callback('35-50', 'old')],
+        [Markup.button.callback('Назад', 'objective')],
+    ]);
+}
+
+const getFigureMarkup = (prev: string) => {
+    return Markup.inlineKeyboard([
+        [Markup.button.callback('Эктоморф', 'thin')], 
+        [Markup.button.callback('Мезоморф', 'muscular')],
+        [Markup.button.callback('Эндоморф', 'fat')],
+        [Markup.button.callback('Назад', prev)],
+    ]);
+}
+
+const getActivityMarkup = (prev: string) => {
+    return Markup.inlineKeyboard([
+        [Markup.button.callback('Низкая', 'activity_low')], 
+        [Markup.button.callback('Средняя', 'activity_medium')],
+        [Markup.button.callback('Высокая', 'activity_high')],
+        [Markup.button.callback('Назад', prev)],
+    ]);
+}
+
+const getInventoryMarkup = (prev: string) => {
+    return Markup.inlineKeyboard([
+        [Markup.button.callback('Штанга', 'barbell')], 
+        [Markup.button.callback('Гантели', 'dumbbells')],
+        [Markup.button.callback('Турник', 'horizontal_bar')],
+        [Markup.button.callback('Отсутствует', 'missing')],
+        [Markup.button.callback('Далее', 'next')],
+        [Markup.button.callback('Назад', prev)],
+    ]);
+}
+
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
 const getBot = () => bot;
 

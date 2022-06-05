@@ -1,7 +1,7 @@
 import express, { Express, Request, Response } from 'express';
 import {startBot} from './Telegram/telegramProcessor';
 import dotenv from 'dotenv';
-import { sequelize } from './DAL/sequelize';
+import sequelize from './DAL/sequelize';
 import Question from './DAL/Models/question';
 import {json} from 'body-parser';
 
