@@ -157,6 +157,12 @@ const startBot = () => {
         ctx.replyWithHTML('5. Наличие или отсутствие спортивного инвентаря (множественный выбор ответов):', getInventoryMarkup(prev))
     })
 
+    bot.action(/inventory_[1-9]/, ctx => {
+        let prev = ctx.session.step;
+        const selected = ctx.match.input.split('-').pop();
+        ctx.replyWithHTML('5. Наличие или отсутствие спортивного инвентаря (множественный выбор ответов):', getInventoryMarkup(prev, +selected))
+    })
+
     bot.launch();
     return bot;
 }
@@ -208,15 +214,29 @@ const getActivityMarkup = (prev: string) => {
     ]);
 }
 
-const getInventoryMarkup = (prev: string) => {
-    return Markup.inlineKeyboard([
-        [Markup.button.callback('Штанга', 'barbell')], 
-        [Markup.button.callback('Гантели', 'dumbbells')],
-        [Markup.button.callback('Турник', 'horizontal_bar')],
-        [Markup.button.callback('Отсутствует', 'missing')],
-        [Markup.button.callback('Далее', 'next')],
+const getInventoryMarkup = (prev: string, selected: number = -1) => {
+    let result = [
+        [Markup.button.callback('Штанга', 'inventory_0')], 
+        [Markup.button.callback('Гантели', 'inventory_1')],
+        [Markup.button.callback('Турник', 'inventory_2')],
+        [Markup.button.callback('Отсутствует', 'days')],
+        [Markup.button.callback('Далее', 'days')],
         [Markup.button.callback('Назад', prev)],
-    ]);
+    ];
+
+    if (selected >= 0 && selected <= 3) {
+        if (selected === 1) {
+            result[selected] = [Markup.button.callback('Штанга - ✔', 'inventory_0')]
+        }
+        else if (selected === 2) {
+            result[selected] = [Markup.button.callback('Гантели - ✔', 'inventory_1')]
+        }
+        else if (selected === 2) {
+            result[selected] = [Markup.button.callback('Турник - ✔', 'inventory_2')]
+        }
+    }
+
+    return Markup.inlineKeyboard(result);
 }
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
