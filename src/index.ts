@@ -10,7 +10,7 @@ dotenv.config();
 const app: Express = express();
 app.use(json());
 
-(async () => await sequelize.sync({alter: true}))();
+//(async () => await sequelize.sync({alter: true}))();
 
 
 app.get('/questions', async (req: Request, res: Response) => {

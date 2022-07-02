@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "lib": ["ES2020"],
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "module": "commonjs",
@@ -10,8 +11,8 @@
     "moduleResolution": "node",
     "strict": true,
     "sourceMap": true,
-    "lib": ["es2015"],
     "skipLibCheck": true,
+    "allowJs": true,
     "rootDir": "src",
     "outDir": "dist"
   }
