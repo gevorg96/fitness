@@ -4,31 +4,47 @@ import { start, gender, email, emailRegex, emailStep, thx, threeYearsAgo, notBad
 import { SessionContext } from './sessionContext';
 import {timeZoneResolver} from "../utils/timeZoneResolver";
 import {initStepInfo, refreshSteps} from "./steps";
+import {UserService} from "../services/userService";
+import User from "../dal/Models/user";
+import {nameof} from "../utils/nameof";
 const PostgresSession = require('telegraf-postgres-session');
 
 dotenv.config();
 
 const token: string = process.env.BOT_TOKEN as string;
 const bot: Telegraf<SessionContext> = new Telegraf(token);
-
 bot.use((new PostgresSession()).middleware());
+
+const userService = new UserService();
 
 const startBot = () => {
     bot.start(async (ctx) => {
+        await userService.init(ctx.chat.id)
         await ctx.reply(start(ctx.from.first_name));
         await ctx.replyWithHTML(gender, Markup.inlineKeyboard([
             [Markup.button.callback('Мужчина', 'male'), Markup.button.callback('Женщина', 'female'), ]
         ]))
     });
-
-    bot.action('male', ctx => {
+    
+    bot.action('male', async ctx => {
+        await userService.update<number>(ctx.chat.id, nameof<User>("gender"), 0);
+        
         ctx.session.step = emailStep;
-        ctx.answerCbQuery();        
-        ctx.replyWithHTML(email)
+        await ctx.answerCbQuery();
+        await ctx.replyWithHTML(email)
+    })
+    bot.action('female', async ctx => {
+        await userService.update<number>(ctx.chat.id, nameof<User>("gender"), 1);
+
+        ctx.session.step = emailStep;
+        await ctx.answerCbQuery();
+        await ctx.replyWithHTML(email)
     })
 
     bot.email(emailRegex, async ctx => {
         if (ctx.session.step === emailStep) {
+            await userService.update<string>(ctx.chat.id, nameof<User>("email"), ctx.match.input);
+
             ctx.session.step = null
             await ctx.replyWithHTML(thx)
             await ctx.replyWithHTML(threeYearsAgo, Markup.inlineKeyboard([
@@ -93,6 +109,10 @@ const startBot = () => {
         await ctx.replyWithHTML("** Снимаю деньги **")
         await delay(1000)
         await ctx.replyWithHTML(paymentSuccess)
+
+        let now = new Date();
+        now.setMonth(now.getMonth() + 1)
+        await userService.update<Date>(ctx.chat.id, "paidTo", now);
 
         ctx.session.step = 'objective'
         ctx.session.stepInfo = JSON.stringify(initStepInfo('objective'))
