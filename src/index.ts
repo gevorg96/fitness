@@ -4,13 +4,17 @@ import dotenv from 'dotenv';
 import sequelize from './DAL/sequelize';
 import Question from './DAL/Models/question';
 import {json} from 'body-parser';
+import {migrate} from "./dal/migration";
 
 dotenv.config();
 
 const app: Express = express();
 app.use(json());
 
-//(async () => await sequelize.sync({alter: true}))();
+(async () => {
+  await sequelize.sync({alter: true})
+  await migrate();
+})();
 
 
 app.get('/questions', async (req: Request, res: Response) => {

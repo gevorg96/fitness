@@ -1,6 +1,7 @@
 import {Repository} from "sequelize-typescript";
 import User from "../dal/Models/user";
 import sequelize from "../dal/sequelize";
+import {getKeyValue} from "../utils/getKeyValues";
 
 export class UserService {
     private get repository(): Repository<User> {
@@ -8,7 +9,7 @@ export class UserService {
     }
 
     async getUserById(id: number) {
-        await this.repository.findOne({where: {id: id}})
+        return await this.repository.findOne({where: {id: id}})
     }
 
     async addOrUpdate(user: User) {
@@ -27,19 +28,21 @@ export class UserService {
         });
     }
     
-    async update<T>(id: number, field: string, value: T) {
+    async update(id: number, updateModel: UpdateUserDto) {
         let obj: any = {}
-        obj[field] = value
-
-        console.log(id)
-        console.log(obj)
+        Object.keys(updateModel).forEach(x => {
+            console.log(x)
+            let res = getKeyValue<keyof UpdateUserDto, UpdateUserDto>(x as UpdateKeys)(updateModel);
+            console.log(res)
+            obj[x] = res.value
+        })
         
         await this.repository.update(obj, {where: {id: id}})
     }
     
     async init(id: number) {
         let user = await this.getUserById(id);
-        if (user !== null) {
+        if (user) {
             return
         }
         

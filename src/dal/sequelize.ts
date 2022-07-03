@@ -35,6 +35,9 @@ const sequelize = new Sequelize(process.env.PGDATABASE, process.env.PGUSER, proc
     UserGroup,
     UserStat
   ],
+  define: {
+    underscored: true
+  },
   repositoryMode: true,
 });
 
